@@ -1,0 +1,167 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="4G LTE Wi-Fi Modem">
+	<main>
+		<!-- The canvas should be placed on the very top because the touch/click event coordinates are currently based on the whole viewport, not element -->
+		<canvas height="960" width="540" id="screen"></canvas>
+		<div id="controls">
+			<fieldset>
+				<legend>Activity List:</legend>
+				<label>Launch Activity</label>
+				<select id="activity-list" name="activity-list">
+					<option value="com.android.settings">Settings</option>
+					<option value="com.android.dialer">Phone</option>
+					<option value="com.android.mms">Messages</option>
+					<option value="fr.neamar.kiss">KISS Launcher*</option>
+					<option value="juloo.keyboard2">Unexpected Keyboard*</option>
+					<option value="tw.com.daxia.virtualsoftkeys">VirtualSoftKeys*</option>
+				</select>
+				<button id="activity-list-custom">Other...</button>
+				<button id="activity-list-btn">GO</button>
+			</fieldset>
+			<fieldset>
+				<legend>Physical Buttons</legend>
+				<button data-input-key="KEYCODE_POWER">Power</button>
+				<button data-input-key="KEYCODE_BACK">Back</button>
+				<button data-input-key="KEYCODE_HOME">Home</button>
+				<button data-input-key="KEYCODE_APP_SWITCH">App Switch</button>
+			</fieldset>
+			<fieldset>
+				<legend>Navigation</legend>
+				<button data-input-key="KEYCODE_PAGE_UP">Page Up</button>
+				<button data-input-key="KEYCODE_PAGE_DOWN">Page Down</button>
+				<button data-input-key="KEYCODE_DPAD_UP">&uarr;</button>
+				<button data-input-key="KEYCODE_DPAD_DOWN">&darr;</button>
+				<button data-input-key="KEYCODE_DPAD_LEFT">&larr;</button>
+				<button data-input-key="KEYCODE_DPAD_RIGHT">&rarr;</button>
+				<button data-input-key="KEYCODE_DPAD_CENTER">OK</button>
+				<button data-input-key="KEYCODE_ENTER">ENTER</button>
+				<button data-input-key="KEYCODE_ESCAPE">ESC</button>
+			</fieldset>
+		</div>
+	</main>
+</Layout>
+
+<style>
+	main {
+		display: flex;
+		flex-direction: row;
+	}
+
+	#controls {
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+		padding: 1rem;
+	}
+</style>
+
+<script>
+	const DURATION_THRESHOLD = 100;
+import { S } from "../../dist/server/chunks/astro_M6u2Hzdh.mjs";
+	const MOVE_THRESHOLD = 10;
+
+	const canvas: HTMLCanvasElement = document.getElementById("screen") as HTMLCanvasElement;
+	let tempTouchX: number|undefined, tempTouchY: number|undefined;
+	let touchStartTime: number|undefined, touchEndTime: number|undefined;
+	function inputKey(key: string){
+		const data = new FormData();
+		data.set("action", "key");
+		data.set("key", key);
+		fetch("/screen", {method: "PUT", body: data});
+	}
+	function launchActivity(name: string){
+		const data = new FormData();
+		data.set("action", "launch");
+		data.set("activity", name);
+		fetch("/screen", {method: "PUT", body: data});
+	}
+	function refreshScreen() {
+		const ctx = canvas.getContext('2d')!;
+		var img1 = new Image();
+		img1.onload = function () {
+			ctx.clearRect(0, 0, 540, 960);
+			ctx.drawImage(img1, 0, 0, 540, 960);
+			setTimeout(refreshScreen, 500);
+		};
+		img1.src = '/screen';
+	}
+	function swipe(ev: MouseEvent|TouchEvent, duration: number) {
+		// Get the final X and Y coordinates of the touch
+		var endClientX: number, endClientY: number
+		if (ev instanceof MouseEvent){
+			endClientX = ev.clientX;
+			endClientY = ev.clientY;
+		} else {
+			endClientX = ev.changedTouches[0].clientX;
+			endClientY = ev.changedTouches[0].clientY;
+		}
+
+		console.log(`Duration: ${duration}`)
+		console.log(`Displacement: ${Math.sqrt(Math.pow(tempTouchX! - endClientX, 2) + Math.pow(tempTouchY! - endClientY, 2))}`)
+		
+		if (duration <= DURATION_THRESHOLD && Math.sqrt(Math.pow(tempTouchX! - endClientX, 2) + Math.pow(tempTouchY! - endClientY, 2)) >= MOVE_THRESHOLD) {
+			console.log(`Swiping (${tempTouchX! * 2}, ${tempTouchY! * 2}) to (${endClientX * 2}, ${endClientY * 2})`);
+			const data = new FormData();
+			data.set("action", "swipe");
+			data.set("from_x", (tempTouchX! * 2).toString());
+			data.set("from_y", (tempTouchY! * 2).toString());
+			data.set("to_x", (endClientX * 2).toString());
+			data.set("to_y", (endClientY * 2).toString());
+			data.set("duration", duration.toString());
+			fetch("/screen", {method: "PUT", body: data});
+		} else {
+			console.log(`Clicking (${tempTouchX! * 2}, ${tempTouchY! * 2})`);
+			const data = new FormData();
+			data.set("action", "tap");
+			data.set("x", (tempTouchX! * 2).toString());
+			data.set("y", (tempTouchY! * 2).toString());
+			fetch("/screen", {method: "PUT", body: data});
+		}
+	}
+	document.getElementById("activity-list-custom")?.addEventListener("click", (ev) => {
+		const activityID = prompt("Enter the activity ID");
+		if (activityID && activityID.length > 0) {
+			console.log(`Launching ${activityID}...`)
+			launchActivity(activityID);
+		}
+	});
+	document.getElementById("activity-list-btn")?.addEventListener("click", (ev) => {
+		const select = document.getElementById("activity-list") as HTMLSelectElement;
+		console.log(`Launching ${select.options[select.selectedIndex].value}...`)
+		launchActivity(select.options[select.selectedIndex].value);
+	});
+	canvas.addEventListener("touchstart", (ev) => {
+		ev.preventDefault();
+		touchStartTime = Date.now();
+		tempTouchX = ev.touches[0].clientX;
+		tempTouchY = ev.touches[0].clientY;
+	});
+	canvas.addEventListener("touchend", (ev) => {
+		const touchEndTime = Date.now();
+		swipe(ev, touchEndTime - touchStartTime!);
+	});
+	canvas.addEventListener("touchend", (ev) => {
+		const touchEndTime = Date.now();
+		swipe(ev, touchEndTime - touchStartTime!);
+	});
+	canvas.addEventListener("mousedown", (ev) => {
+		ev.preventDefault();
+		touchStartTime = Date.now();
+		tempTouchX = ev.clientX;
+		tempTouchY = ev.clientY;
+	});
+	canvas.addEventListener("mouseup", (ev) => {
+		const touchEndTime = Date.now();
+		swipe(ev, touchEndTime - touchStartTime!);
+	});
+	document.querySelectorAll("[data-input-key]").forEach((el) => {
+		el.addEventListener("click", (ev) => {
+			console.log(`Keyevent ${el.getAttribute("data-input-key")}`)
+			inputKey(el.getAttribute("data-input-key")!)
+		});
+	});
+	refreshScreen();
+</script>
