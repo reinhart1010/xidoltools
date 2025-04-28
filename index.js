@@ -1,4 +1,4 @@
-import Adb from '@u4/adbkit';
+import { Adb } from '@devicefarmer/adbkit';
 import express, { response } from 'express';
 import { handler as ssrHandler } from './dist/server/entry.mjs';
 
