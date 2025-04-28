@@ -59,8 +59,7 @@ import Layout from '../layouts/Layout.astro';
 </style>
 
 <script>
-	const DURATION_THRESHOLD = 100;
-import { S } from "../../dist/server/chunks/astro_M6u2Hzdh.mjs";
+	const DURATION_THRESHOLD = 500;
 	const MOVE_THRESHOLD = 10;
 
 	const canvas: HTMLCanvasElement = document.getElementById("screen") as HTMLCanvasElement;
@@ -86,7 +85,7 @@ import { S } from "../../dist/server/chunks/astro_M6u2Hzdh.mjs";
 			ctx.drawImage(img1, 0, 0, 540, 960);
 			setTimeout(refreshScreen, 500);
 		};
-		img1.src = '/screen';
+		img1.src = '/screen?rand=' + Math.random();
 	}
 	function swipe(ev: MouseEvent|TouchEvent, duration: number) {
 		// Get the final X and Y coordinates of the touch

@@ -3,6 +3,10 @@ Some Qualcomm-based USB modems contains a hidden Android operating system inside
 
 The modem runs a stripped-down version of Android 4.4.4 KitKat, and supports receiving SMS, even though the SMS menu is not available on the modem's configuration website. This tool is created to see and interact with the Android user interface that the modem has without [`scrcpy`](https://github.com/GenyMobile/scrcpy) (as `scrcpy` does not support KitKat).
 
+> [!IMPORTANT]
+>
+> Remember to enable USB debugging by visiting to <http://192.168.100.1/usbdebug.html> (returns a blank page and simply restarts the device).
+
 ## How to use?
 This is an [Astro](https://astro.build) project. So in order to run the app, you will need to have these tools installed:
 
