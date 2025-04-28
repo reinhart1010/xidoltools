@@ -1,4 +1,5 @@
-import { Adb } from '@devicefarmer/adbkit';
+import pkg from '@devicefarmer/adbkit';
+const { Adb } = pkg;
 import express, { response } from 'express';
 import { handler as ssrHandler } from './dist/server/entry.mjs';
 

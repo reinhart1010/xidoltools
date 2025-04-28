@@ -1,4 +1,5 @@
-import { Adb } from '@devicefarmer/adbkit';
+import pkg from '@devicefarmer/adbkit';
+const { Adb } = pkg;
 import { type APIRoute } from "astro";
 const client = Adb.createClient();
 const device = client.getDevice("0123456789ABCDEF");
