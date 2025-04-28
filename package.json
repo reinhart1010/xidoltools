@@ -1,5 +1,6 @@
 {
   "name": "xidoltools",
+  "type": "module",
   "version": "0.0.1",
   "scripts": {
     "dev": "astro dev",
@@ -16,6 +17,7 @@
     "astro-bootstrap": "^0.6.2",
     "bluebird": "^3.7.2",
     "bootstrap": "^5.3.5",
+    "promise-duplex": "^6.0.0",
     "typescript": "^5.8.3"
   },
   "devDependencies": {

@@ -29,6 +29,9 @@ importers:
       bootstrap:
         specifier: ^5.3.5
         version: 5.3.5(@popperjs/core@2.11.8)
+      promise-duplex:
+        specifier: 6.0.0
+        version: 6.0.0
       typescript:
         specifier: ^5.8.3
         version: 5.8.3
@@ -843,6 +846,9 @@ packages:
     resolution: {integrity: sha512-9Kr/j4O16ISv8zBBhJoi4bXOYNTkFLOqSL3UDB0njXxCXNezjeyVrJyGOWtgfs/q2km1gwBcfH8q1yEGoMYunA==}
     engines: {node: '>=18'}
 
+  core-js@3.41.0:
+    resolution: {integrity: sha512-SJ4/EHwS36QMJd6h/Rg+GyR4A5xE0FSI3eZ+iBVpfqf1x0eTSg1smWLHrA+2jQThZSh97fmSgFSU8B61nxosxA==}
+
   cross-fetch@3.2.0:
     resolution: {integrity: sha512-Q+xVJLoGOeIMXZmbUK4HYk+69cQH6LudR0Vu/pRm2YlU/hDV9CiS0gKUMaWY5f2NeUH9C1nV3bsTlCo0FsTV1Q==}
 
@@ -1437,13 +1443,25 @@ packages:
     resolution: {integrity: sha512-DEvV2ZF2r2/63V+tK8hQvrR2ZGn10srHbXviTlcv7Kpzw8jWiNTqbVgjO3IY8RxrrOUF8VPMQQFysYYYv0YZxw==}
     engines: {node: '>=6'}
 
+  promise-duplex@6.0.0:
+    resolution: {integrity: sha512-ZL7rquzjTFzInDBeWYcsT+qddolNvzigahk6MI6qLSbQvlyRRCJkU3JztgaVunzvkH28smRa2Qu/cY9RXtSkgA==}
+    engines: {node: '>=10.0.0'}
+
   promise-duplex@8.0.0:
     resolution: {integrity: sha512-JlrnT6KZMRD+t4cxP7gh/dlGP2pl01/jTPg3pTLvFLBTdHTbTTdc+g25q0qswC3ziO9RAr3L1b2n/++4y23GQg==}
     engines: {node: '>=16.0.0'}
 
+  promise-readable@6.0.0:
+    resolution: {integrity: sha512-5NxtmUswijvX5cAM0zPSy6yiCXH/eKBpiiBq6JfAUrmngMquMbzcBhF2qA+ocs4rYYKdvAfv3cOvZxADLtL1CA==}
+    engines: {node: '>=10.0.0'}
+
   promise-readable@8.0.1:
     resolution: {integrity: sha512-peVAz+49xRooF1Om2wYSOluKpOApnpiJVOKgQ6IR/ZAWo15tBa4ZtcKKSTAytRiNJVlkvil9NoFhqihY4Sl1Fw==}
     engines: {node: '>=16.0.0'}
+
+  promise-writable@6.0.0:
+    resolution: {integrity: sha512-b81zre/itgJFS7dwWzIdKNVVqvLiUxYRS/wolUB0H1YY/tAaS146XGKa4Q/5wCbsnXLyn0MCeV6f8HHe4iUHLg==}
+    engines: {node: '>=10.0.0'}
 
   promise-writable@8.0.0:
     resolution: {integrity: sha512-Qn7/5tE42fjLUWevPm/SFmVz26tRdhmxmPXgOJSeIwLnkI2V4u0/t+CrRXb8ic1Jy9qqvOHVYm+sAIgel++eVA==}
@@ -2863,6 +2881,8 @@ snapshots:
 
   cookie@1.0.2: {}
 
+  core-js@3.41.0: {}
+
   cross-fetch@3.2.0:
     dependencies:
       node-fetch: 2.7.0
@@ -3642,12 +3662,24 @@ snapshots:
 
   prismjs@1.30.0: {}
 
+  promise-duplex@6.0.0:
+    dependencies:
+      core-js: 3.41.0
+      promise-readable: 6.0.0
+      promise-writable: 6.0.0
+
   promise-duplex@8.0.0:
     dependencies:
       promise-readable: 8.0.1
       promise-writable: 8.0.0
 
+  promise-readable@6.0.0:
+    dependencies:
+      core-js: 3.41.0
+
   promise-readable@8.0.1: {}
+
+  promise-writable@6.0.0: {}
 
   promise-writable@8.0.0: {}
 
