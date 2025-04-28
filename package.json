@@ -10,14 +10,14 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/check": "^0.4.1",
-    "@astrojs/node": "^7.0.4",
-    "@u4/adbkit": "^4.1.19",
-    "astro": "^4.1.2",
+    "@astrojs/check": "^0.9.4",
+    "@astrojs/node": "^9.2.1",
+    "@u4/adbkit": "^4.1.20",
+    "astro": "^5.7.5",
     "astro-bootstrap": "^0.6.2",
     "bluebird": "^3.7.2",
-    "bootstrap": "^5.3.2",
-    "typescript": "^5.3.3"
+    "bootstrap": "^5.3.5",
+    "typescript": "^5.8.3"
   },
   "devDependencies": {
     "@types/bluebird": "^3.5.42",
